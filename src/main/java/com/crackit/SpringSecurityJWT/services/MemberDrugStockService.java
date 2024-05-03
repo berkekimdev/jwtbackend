@@ -44,7 +44,7 @@ public class MemberDrugStockService {
                 savedDrugStock.getDrug().getId(),
                 savedDrugStock.getQuantity(),
                 savedDrugStock.getDrug().getIlacAdi(),
-                savedDrugStock.getUser().getFirstName()
+                savedDrugStock.getUser().getEczaneAdi()
         );
     }
 
@@ -62,7 +62,7 @@ public class MemberDrugStockService {
                 updatedDrugStock.getDrug().getId(),
                 updatedDrugStock.getQuantity(),
                 updatedDrugStock.getDrug().getIlacAdi(),  // İlaç ismi
-                updatedDrugStock.getUser().getFirstName()  // Kullanıcı adı
+                updatedDrugStock.getUser().getEczaneAdi()  // Kullanıcı adı
         );
     }
 
@@ -74,7 +74,7 @@ public class MemberDrugStockService {
                 stock.getDrug().getId(),
                 stock.getQuantity(),
                 stock.getDrug().getIlacAdi(),  // İlaç ismi
-                stock.getUser().getFirstName()  // Kullanıcı adı (eczane veya bireysel kullanıcı adı)
+                stock.getUser().getEczaneAdi()  // Kullanıcı adı (eczane veya bireysel kullanıcı adı)
         )).collect(Collectors.toList());
     }
 

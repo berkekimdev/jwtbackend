@@ -12,10 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    private String firstName;
-    private String lastName;
+    private String eczaneAdi;
+    private String city;
     private String email;
     private String password;
-    private String address;  // Add this line
+    private String address;
+    private String district; // Yeni eklenen alan
+    private double latitude; // Yeni eklenen alan
+    private double longitude; /// Add this line
     private Role role;
 }

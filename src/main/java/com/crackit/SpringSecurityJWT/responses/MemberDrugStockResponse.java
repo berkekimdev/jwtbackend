@@ -6,16 +6,16 @@ public class MemberDrugStockResponse {
     private Long drugId;
     private int quantity;
     private String drugName;  // İlaç ismi
-    private String firstName;  // Kullanıcı adı
+    private String eczaneAdi;  // Kullanıcı adı
 
     // Constructor, getters and setters
-    public MemberDrugStockResponse(Long id, Integer userId, Long drugId, int quantity, String drugName, String firstName) {
+    public MemberDrugStockResponse(Long id, Integer userId, Long drugId, int quantity, String drugName, String eczaneAdi) {
         this.id = id;
         this.userId = userId;
         this.drugId = drugId;
         this.quantity = quantity;
         this.drugName = drugName;
-        this.firstName = firstName;
+        this.eczaneAdi = eczaneAdi;
     }
 
     public Long getId() {
@@ -58,11 +58,11 @@ public class MemberDrugStockResponse {
         this.drugName = drugName;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getEczaneAdi() {
+        return eczaneAdi;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEczaneAdi(String eczaneAdi) {
+        this.eczaneAdi = eczaneAdi;
     }
 }

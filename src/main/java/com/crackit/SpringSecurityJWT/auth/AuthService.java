@@ -19,17 +19,21 @@ public class AuthService {
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         var user = User.builder()
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
+                .eczaneAdi(registerRequest.getEczaneAdi())
+                .city(registerRequest.getCity()) // lastName to city
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .address(registerRequest.getAddress())  // Add this line
+                .address(registerRequest.getAddress())
+                .district(registerRequest.getDistrict()) // Yeni eklenen alan
+                .latitude(registerRequest.getLatitude()) // Yeni eklenen alan
+                .longitude(registerRequest.getLongitude()) // Yeni eklenen alan
                 .role(registerRequest.getRole())
                 .build();
         var savedUser = userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         //FirstStep

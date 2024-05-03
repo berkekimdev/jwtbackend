@@ -6,11 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "_user")
@@ -24,14 +22,20 @@ public class User implements UserDetails {
     @GeneratedValue
     private Integer id;
 
-    private String firstName;
+    private String eczaneAdi;
 
-    private String lastName;
+    private String city;
 
     private String email;
 
     private String password;
     private String address;  // Add this line
+
+    private String district;  // Yeni eklenen alan
+
+    private double latitude;  // Yeni eklenen alan
+    private double longitude; // Yeni eklenen alan
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
