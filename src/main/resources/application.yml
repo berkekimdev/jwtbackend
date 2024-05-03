@@ -4,12 +4,23 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc.lob.non_contextual_creation: true  # BLOB ve CLOB için kullanılır, bazı JDBC sürücüleri için gerekli olabilir
+        jdbc.time_zone: UTC  # Veritabanı ve uygulama arasında zaman dilimi tutarlılığı için
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE

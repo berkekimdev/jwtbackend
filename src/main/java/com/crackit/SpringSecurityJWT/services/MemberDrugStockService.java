@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,18 +28,26 @@ public class MemberDrugStockService {
     private DrugRepository drugRepository;
 
     public MemberDrugStockResponse saveDrugStock(MemberDrugStockRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-        Drug drug = drugRepository.findById(request.getDrugId()).orElseThrow(() -> new RuntimeException("Drug not found"));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
+        Drug drug = drugRepository.findById(request.getDrugId()).orElseThrow(() -> new RuntimeException("İlaç bulunamadı"));
 
-        MemberDrugStock drugStock = new MemberDrugStock();
+        Optional<MemberDrugStock> existingStock = memberDrugStockRepository.findByUserAndDrug(user, drug);
+        MemberDrugStock drugStock = existingStock.orElseGet(MemberDrugStock::new);
         drugStock.setUser(user);
         drugStock.setDrug(drug);
         drugStock.setQuantity(request.getQuantity());
 
         MemberDrugStock savedDrugStock = memberDrugStockRepository.save(drugStock);
-        return new MemberDrugStockResponse(savedDrugStock.getId(), savedDrugStock.getUser().getId(),
-                savedDrugStock.getDrug().getId(), savedDrugStock.getQuantity());
+        return new MemberDrugStockResponse(
+                savedDrugStock.getId(),
+                savedDrugStock.getUser().getId(),
+                savedDrugStock.getDrug().getId(),
+                savedDrugStock.getQuantity(),
+                savedDrugStock.getDrug().getIlacAdi(),
+                savedDrugStock.getUser().getFirstName()
+        );
     }
+
 
     public MemberDrugStockResponse updateDrugStock(Long id, MemberDrugStockRequest request) {
         MemberDrugStock drugStock = memberDrugStockRepository.findById(id)
@@ -47,20 +56,30 @@ public class MemberDrugStockService {
         drugStock.setQuantity(request.getQuantity());  // Stoğun miktarını güncelle
 
         MemberDrugStock updatedDrugStock = memberDrugStockRepository.save(drugStock);
-        return new MemberDrugStockResponse(updatedDrugStock.getId(),
+        return new MemberDrugStockResponse(
+                updatedDrugStock.getId(),
                 updatedDrugStock.getUser().getId(),
                 updatedDrugStock.getDrug().getId(),
-                updatedDrugStock.getQuantity());
+                updatedDrugStock.getQuantity(),
+                updatedDrugStock.getDrug().getIlacAdi(),  // İlaç ismi
+                updatedDrugStock.getUser().getFirstName()  // Kullanıcı adı
+        );
     }
+
     public List<MemberDrugStockResponse> findAllDrugStocks() {
-        List<MemberDrugStock> drugStocks = memberDrugStockRepository.findAll();
-        return drugStocks.stream().map(drugStock -> new MemberDrugStockResponse(
-                drugStock.getId(),
-                drugStock.getUser().getId(),
-                drugStock.getDrug().getId(),
-                drugStock.getQuantity()
+        List<MemberDrugStock> stocks = memberDrugStockRepository.findAll();
+        return stocks.stream().map(stock -> new MemberDrugStockResponse(
+                stock.getId(),
+                stock.getUser().getId(),
+                stock.getDrug().getId(),
+                stock.getQuantity(),
+                stock.getDrug().getIlacAdi(),  // İlaç ismi
+                stock.getUser().getFirstName()  // Kullanıcı adı (eczane veya bireysel kullanıcı adı)
         )).collect(Collectors.toList());
     }
+
+
+
 
 
 }
