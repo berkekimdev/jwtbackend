@@ -12,6 +12,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+
+    public void updateUserActiveStatus(Integer id, boolean isActive) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setActive(isActive);  // isActive alanını güncelle
+        userRepository.save(user);  // Güncellenmiş kullanıcıyı kaydet
+    }
+
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }

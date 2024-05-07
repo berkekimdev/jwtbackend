@@ -1,12 +1,13 @@
 package com.crackit.SpringSecurityJWT.controllers;
 
+import com.crackit.SpringSecurityJWT.auth.UserActiveRequest;
 import com.crackit.SpringSecurityJWT.user.User;
 import com.crackit.SpringSecurityJWT.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -21,6 +22,14 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.findAllUsers();
     }
+
+    @PatchMapping("/{id}/activate")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<String> updateUserActiveStatus(@PathVariable Integer id, @RequestBody UserActiveRequest request) {
+        userService.updateUserActiveStatus(id, request.isActive());
+        return ResponseEntity.ok("User active status updated to: " + request.isActive());
+    }
+
 
     // Belirli bir kullanıcının detaylarını döndür
     @GetMapping("/{id}")

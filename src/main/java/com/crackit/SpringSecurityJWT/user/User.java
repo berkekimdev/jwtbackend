@@ -35,7 +35,7 @@ public class User implements UserDetails {
 
     private double latitude;  // Yeni eklenen alan
     private double longitude; // Yeni eklenen alan
-
+    private boolean isActive = false;  // Kullanıcının aktif olup olmadığını belirten alan, varsayılan olarak false
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -68,6 +68,13 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isActive;  // isActive alanına bağlı olarak kullanıcının etkin olup olmadığını kontrol eder
     }
+
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+
+
 }

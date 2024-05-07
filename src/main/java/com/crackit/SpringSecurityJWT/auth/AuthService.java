@@ -6,6 +6,7 @@ import com.crackit.SpringSecurityJWT.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class AuthService {
                 .latitude(registerRequest.getLatitude()) // Yeni eklenen alan
                 .longitude(registerRequest.getLongitude()) // Yeni eklenen alan
                 .role(registerRequest.getRole())
+                .isActive(false)
                 .build();
         var savedUser = userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
@@ -36,27 +38,22 @@ public class AuthService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        //FirstStep
-            //We need to validate our request (validate whether password & username is correct)
-            //Verify whether user present in the database
-            //Which AuthenticationProvider -> DaoAuthenticationProvider (Inject)
-            //We need to authenticate using authenticationManager injecting this authenticationProvider
-        //SecondStep
-            //Verify whether userName and password is correct => UserNamePasswordAuthenticationToken
-            //Verify whether user present in db
-            //generateToken
-            //Return the token
+        // Kullanıcı bilgilerini doğrulama
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().accessToken(jwtToken).build();
 
+        // E-posta ile kullanıcıyı bulma ve aktif olup olmadığını kontrol etme
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı bulunamadı"));
+
+        if (!user.isActive()) {
+            throw new IllegalStateException("Hesap aktif değil. Lütfen hesabınızın aktifleştirildiğinden emin olun.");
+        }
+
+        // Kullanıcı aktifse, JWT token üret ve dön
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthenticationResponse(jwtToken);
     }
 }
 
