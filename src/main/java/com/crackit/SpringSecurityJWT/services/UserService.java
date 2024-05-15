@@ -31,6 +31,7 @@ public class UserService {
         user.setEmail(userRequest.getEmail());
         user.setPassword(userRequest.getPassword());  // Şifre, hashlenmiş olarak saklanmalıdır
         user.setAddress(userRequest.getAddress());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDistrict(userRequest.getDistrict());
         user.setLatitude(userRequest.getLatitude());
         user.setLongitude(userRequest.getLongitude());

@@ -21,4 +21,5 @@ public class RegisterRequest {
     private double latitude; // Yeni eklenen alan
     private double longitude; /// Add this line
     private Role role;
+    private String phoneNumber;
 }

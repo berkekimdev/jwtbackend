@@ -1,7 +1,9 @@
 package com.crackit.SpringSecurityJWT.services;
 
 import com.crackit.SpringSecurityJWT.entities.Drug;
+import com.crackit.SpringSecurityJWT.entities.MemberDrugStock;
 import com.crackit.SpringSecurityJWT.repositories.DrugRepository;
+import com.crackit.SpringSecurityJWT.repositories.MemberDrugStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -13,6 +15,8 @@ import java.util.List;
 public class DrugService {
     @Autowired
     private DrugRepository drugRepository;
+    @Autowired
+    private MemberDrugStockRepository memberDrugStockRepository;
 
     public Drug updateDrug(Long drugId, Drug drugDetails) {
         Drug drug = drugRepository.findById(drugId)
@@ -34,7 +38,14 @@ public class DrugService {
     }
 
     public List<Drug> findAllDrugs() {
-        return drugRepository.findAll();
+        List<Drug> drugs = drugRepository.findAll();
+        for (Drug drug : drugs) {
+            int totalStock = memberDrugStockRepository.findByDrug(drug).stream()
+                    .mapToInt(MemberDrugStock::getQuantity)
+                    .sum();
+            drug.setTotalStock(totalStock);
+        }
+        return drugs;
     }
 
     public Drug findDrugById(Long drugId) {

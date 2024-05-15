@@ -25,6 +25,7 @@ public class AuthService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .address(registerRequest.getAddress())
+                .phoneNumber(registerRequest.getPhoneNumber())
                 .district(registerRequest.getDistrict()) // Yeni eklenen alan
                 .latitude(registerRequest.getLatitude()) // Yeni eklenen alan
                 .longitude(registerRequest.getLongitude()) // Yeni eklenen alan

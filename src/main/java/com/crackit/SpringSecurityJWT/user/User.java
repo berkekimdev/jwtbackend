@@ -21,13 +21,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
-
+    @Column(unique = true)
     private String eczaneAdi;
 
     private String city;
 
     private String email;
-
+    private String phoneNumber;
     private String password;
     private String address;  // Add this line
 
@@ -40,6 +40,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

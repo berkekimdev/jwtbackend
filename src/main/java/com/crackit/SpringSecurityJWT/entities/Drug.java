@@ -10,10 +10,13 @@ public class Drug {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique=true)
     private String ilacAdi;
     private String ilacGrubu;
     private String ilacEtkenMaddesi;
 
+    @Transient
+    private int totalStock;
     public Long getId() {
         return id;
     }
@@ -45,4 +48,12 @@ public class Drug {
     public void setIlacEtkenMaddesi(String ilacEtkenMaddesi) {
         this.ilacEtkenMaddesi = ilacEtkenMaddesi;
     }
+    public int getTotalStock() {
+        return totalStock;
+    }
+
+    public void setTotalStock(int totalStock) {
+        this.totalStock = totalStock;
+    }
+
 }
