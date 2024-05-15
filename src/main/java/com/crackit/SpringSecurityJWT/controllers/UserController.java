@@ -14,6 +14,9 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
+
+
+
     @Autowired
     private UserService userService;
 
@@ -23,11 +26,33 @@ public class UserController {
         return userService.findAllUsers();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User userRequest) {
+        User updatedUser = userService.updateUser(id, userRequest);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/{userId}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
+
+
     @PatchMapping("/{id}/activate")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<String> updateUserActiveStatus(@PathVariable Integer id, @RequestBody UserActiveRequest request) {
         userService.updateUserActiveStatus(id, request.isActive());
         return ResponseEntity.ok("User active status updated to: " + request.isActive());
+    }
+
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<String> updatePassword(@PathVariable Integer id, @RequestBody String newPassword) {
+        userService.updatePassword(id, newPassword);
+        return ResponseEntity.ok("Password updated successfully.");
     }
 
 

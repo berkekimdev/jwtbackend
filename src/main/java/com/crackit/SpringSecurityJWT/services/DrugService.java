@@ -14,6 +14,21 @@ public class DrugService {
     @Autowired
     private DrugRepository drugRepository;
 
+    public Drug updateDrug(Long drugId, Drug drugDetails) {
+        Drug drug = drugRepository.findById(drugId)
+                .orElseThrow(() -> new RuntimeException("Drug not found with id: " + drugId));
+
+        drug.setIlacAdi(drugDetails.getIlacAdi());
+        drug.setIlacGrubu(drugDetails.getIlacGrubu());
+        drug.setIlacEtkenMaddesi(drugDetails.getIlacEtkenMaddesi());
+
+        return drugRepository.save(drug);
+    }
+
+    public void deleteDrug(Long drugId) {
+        drugRepository.deleteById(drugId);
+    }
+
     public Drug saveDrug(Drug drug) {
         return drugRepository.save(drug);  // Veritabanına ilacı kaydeden metod
     }
@@ -40,4 +55,5 @@ public class DrugService {
 
         return results.isEmpty() ? List.of() : results;
     }
+
 }

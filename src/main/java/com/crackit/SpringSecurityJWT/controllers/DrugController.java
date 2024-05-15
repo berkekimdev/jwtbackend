@@ -34,6 +34,20 @@ public class DrugController {
         }
     }
 
+    @DeleteMapping("/{drugId}")
+    public ResponseEntity<?> deleteDrug(@PathVariable Long drugId) {
+        drugService.deleteDrug(drugId);
+        return ResponseEntity.ok("Drug deleted successfully");
+    }
+
+
+    @PutMapping("/{drugId}")
+    public ResponseEntity<Drug> updateDrug(@PathVariable Long drugId, @RequestBody Drug drugDetails) {
+        Drug updatedDrug = drugService.updateDrug(drugId, drugDetails);
+        return ResponseEntity.ok(updatedDrug);
+    }
+
+
     @GetMapping("/search")
     public ResponseEntity<?> searchDrugs(@RequestParam String query) {
         List<Drug> drugs = drugService.searchDrugs(query);

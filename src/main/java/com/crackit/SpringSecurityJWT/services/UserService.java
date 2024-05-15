@@ -20,6 +20,39 @@ public class UserService {
         userRepository.save(user);  // Güncellenmiş kullanıcıyı kaydet
     }
 
+
+    public User updateUser(Integer id, User userRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        // Temel bilgiler
+        user.setEczaneAdi(userRequest.getEczaneAdi());
+        user.setCity(userRequest.getCity());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());  // Şifre, hashlenmiş olarak saklanmalıdır
+        user.setAddress(userRequest.getAddress());
+        user.setDistrict(userRequest.getDistrict());
+        user.setLatitude(userRequest.getLatitude());
+        user.setLongitude(userRequest.getLongitude());
+        user.setActive(userRequest.isActive());
+        user.setRole(userRequest.getRole());  // Rol bilgisi, EnumType olarak saklanıyor
+
+        // Veritabanında güncellenmiş kullanıcı bilgilerini kaydet
+        return userRepository.save(user);
+    }
+
+
+    public void updatePassword(Integer id, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setPassword(newPassword);  // Yeni şifreyi şifreleme ile güncelle
+        userRepository.save(user);
+    }
+    public void deleteUser(Integer userId) {
+        userRepository.deleteById(userId);
+    }
+
+
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
