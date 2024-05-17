@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(GET, "/crackit/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MEMBER_READ.name())
                                 .requestMatchers(POST, "/crackit/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MEMBER_CREATE.name())
                                 .requestMatchers(GET, "/api/drugs").permitAll()  // GET isteklerine herkes erişebilir
+                                .requestMatchers(GET, "/api/drugs/byGroup").permitAll()
                                 .requestMatchers(POST, "/api/drugs").hasAnyRole("MEMBER", "ADMIN")  // POST isteklerine sadece MEMBER ve ADMIN erişebilir
                                 .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

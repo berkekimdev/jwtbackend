@@ -67,4 +67,7 @@ public class DrugService {
         return results.isEmpty() ? List.of() : results;
     }
 
+    public List<Drug> findDrugsByGroup(String group) {
+        return drugRepository.findByIlacGrubu(group);
+    }
 }

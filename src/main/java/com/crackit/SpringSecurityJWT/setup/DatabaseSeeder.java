@@ -25,6 +25,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .eczaneAdi("Admin Eczane")
                     .city("İstanbul")
                     .email("admin@example.com")
+                    .phoneNumber("05532106873")
                     .password(passwordEncoder.encode("adminpassword")) // Şifre hashleniyor
                     .address("Admin Address")
                     .district("Admin District")

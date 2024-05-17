@@ -23,6 +23,15 @@ public class DrugController {
     public List<Drug> getAllDrugs() {
         return drugService.findAllDrugs();
     }
+    @GetMapping("/byGroup")
+    public ResponseEntity<List<Drug>> getDrugsByGroup(@RequestParam String group) {
+        List<Drug> drugs = drugService.findDrugsByGroup(group);
+        if (drugs == null || drugs.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(drugs);
+    }
+
 
     @GetMapping("/{drugId}")
     public ResponseEntity<Drug> getDrugById(@PathVariable Long drugId) {
