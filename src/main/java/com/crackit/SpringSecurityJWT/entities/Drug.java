@@ -2,8 +2,6 @@ package com.crackit.SpringSecurityJWT.entities;
 
 import jakarta.persistence.*;
 
-
-
 @Entity
 @Table(name = "drugs")
 public class Drug {
@@ -17,6 +15,19 @@ public class Drug {
 
     @Transient
     private int totalStock;
+
+    public Drug() {
+        // Default constructor
+    }
+
+    public Drug(String ilacAdi, String ilacGrubu, String ilacEtkenMaddesi) {
+        this.ilacAdi = ilacAdi;
+        this.ilacGrubu = ilacGrubu;
+        this.ilacEtkenMaddesi = ilacEtkenMaddesi;
+    }
+
+    // Getter and setter methods
+
     public Long getId() {
         return id;
     }
@@ -48,6 +59,7 @@ public class Drug {
     public void setIlacEtkenMaddesi(String ilacEtkenMaddesi) {
         this.ilacEtkenMaddesi = ilacEtkenMaddesi;
     }
+
     public int getTotalStock() {
         return totalStock;
     }
@@ -55,5 +67,4 @@ public class Drug {
     public void setTotalStock(int totalStock) {
         this.totalStock = totalStock;
     }
-
 }

@@ -70,4 +70,8 @@ public class DrugService {
     public List<Drug> findDrugsByGroup(String group) {
         return drugRepository.findByIlacGrubu(group);
     }
+
+    public List<Drug> findDrugsByFirstLetter(String letter) {
+        return drugRepository.findByIlacAdiStartingWithIgnoreCase(letter);
+    }
 }

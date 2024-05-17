@@ -11,16 +11,27 @@ public class MemberDrugStock {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;  // Existing User entity
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "drug_id")
+    @JoinColumn(name = "drug_id", nullable = false)
     private Drug drug;
 
     private int quantity;
 
-    // Getters and Setters
+    public MemberDrugStock() {
+        // Default constructor
+    }
+
+    public MemberDrugStock(User user, Drug drug, int quantity) {
+        this.user = user;
+        this.drug = drug;
+        this.quantity = quantity;
+    }
+
+    // Getter and setter methods
+
     public Long getId() {
         return id;
     }

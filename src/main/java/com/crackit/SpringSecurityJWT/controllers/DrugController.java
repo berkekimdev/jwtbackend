@@ -33,6 +33,7 @@ public class DrugController {
     }
 
 
+
     @GetMapping("/{drugId}")
     public ResponseEntity<Drug> getDrugById(@PathVariable Long drugId) {
         Drug drug = drugService.findDrugById(drugId);
@@ -48,6 +49,8 @@ public class DrugController {
         drugService.deleteDrug(drugId);
         return ResponseEntity.ok("Drug deleted successfully");
     }
+
+
 
 
     @PutMapping("/{drugId}")
@@ -66,6 +69,16 @@ public class DrugController {
             return ResponseEntity.ok(drugs);
         }
     }
+
+    @GetMapping("/byFirstLetter")
+    public ResponseEntity<List<Drug>> getDrugsByFirstLetter(@RequestParam String letter) {
+        List<Drug> drugs = drugService.findDrugsByFirstLetter(letter);
+        if (drugs == null || drugs.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(drugs);
+    }
+
 
 
 }
