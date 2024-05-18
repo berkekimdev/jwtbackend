@@ -3,18 +3,22 @@ package com.crackit.SpringSecurityJWT.controllers;
 import com.crackit.SpringSecurityJWT.auth.UserActiveRequest;
 import com.crackit.SpringSecurityJWT.user.User;
 import com.crackit.SpringSecurityJWT.services.UserService;
+import com.crackit.SpringSecurityJWT.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
 
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Autowired
@@ -48,6 +52,15 @@ public class UserController {
         return ResponseEntity.ok("User active status updated to: " + request.isActive());
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        Optional<User> user = userRepository.findByEmail(username);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PatchMapping("/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable Integer id, @RequestBody String newPassword) {

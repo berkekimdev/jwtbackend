@@ -3,6 +3,7 @@ package com.crackit.SpringSecurityJWT.services;
 import com.crackit.SpringSecurityJWT.user.User;
 import com.crackit.SpringSecurityJWT.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     public void updateUserActiveStatus(Integer id, boolean isActive) {
@@ -28,8 +31,7 @@ public class UserService {
         // Temel bilgiler
         user.setEczaneAdi(userRequest.getEczaneAdi());
         user.setCity(userRequest.getCity());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(userRequest.getPassword());  // Şifre, hashlenmiş olarak saklanmalıdır
+        user.setEmail(userRequest.getEmail());// Şifre, hashlenmiş olarak saklanmalıdır
         user.setAddress(userRequest.getAddress());
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDistrict(userRequest.getDistrict());
@@ -37,6 +39,10 @@ public class UserService {
         user.setLongitude(userRequest.getLongitude());
         user.setActive(userRequest.isActive());
         user.setRole(userRequest.getRole());  // Rol bilgisi, EnumType olarak saklanıyor
+        // Şifre, hashlenmiş olarak saklanmalıdır
+        if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
 
         // Veritabanında güncellenmiş kullanıcı bilgilerini kaydet
         return userRepository.save(user);
