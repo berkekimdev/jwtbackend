@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -61,14 +62,24 @@ public class DrugController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchDrugs(@RequestParam String query) {
-        List<Drug> drugs = drugService.searchDrugs(query);
+    public ResponseEntity<List<Drug>> searchDrugs(@RequestParam String query, @RequestParam String type) {
+        List<Drug> drugs;
+        if (type.equals("ilacGrubu")) {
+            drugs = drugService.findDrugsByGroup(query);
+        } else {
+            drugs = drugService.findDrugsByName(query);
+            drugs.forEach(drug -> {
+                drug.setSearchCount(drug.getSearchCount() + 1);
+                drugService.saveDrug(drug);
+            });
+        }
         if (drugs.isEmpty()) {
-            return ResponseEntity.ok("Böyle bir ilaç veya ilaç grubu bulunamadı.");
+            return ResponseEntity.ok(Collections.emptyList());
         } else {
             return ResponseEntity.ok(drugs);
         }
     }
+
 
     @GetMapping("/byFirstLetter")
     public ResponseEntity<List<Drug>> getDrugsByFirstLetter(@RequestParam String letter) {
@@ -78,6 +89,18 @@ public class DrugController {
         }
         return ResponseEntity.ok(drugs);
     }
+
+    @GetMapping("/top-searched")
+    public ResponseEntity<List<Drug>> getTopSearchedDrugs() {
+        List<Drug> drugs = drugService.findTopSearchedDrugs();
+        return ResponseEntity.ok(drugs);
+    }
+
+    @GetMapping("/latest")
+    public List<Drug> getLatestDrugs() {
+        return drugService.findLatestDrugs(); // En son eklenen ilaçları getir
+    }
+
 
 
 
