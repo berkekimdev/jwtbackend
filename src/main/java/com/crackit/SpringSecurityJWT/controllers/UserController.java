@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok("User active status updated to: " + request.isActive());
     }
 
+    // Sadece aktif kullanıcıları döndüren yeni endpoint
+    @GetMapping("/active")
+    public List<User> getActiveUsers() {
+        return userService.findActiveUsers();
+    }
+
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userRepository.findByEmail(username);

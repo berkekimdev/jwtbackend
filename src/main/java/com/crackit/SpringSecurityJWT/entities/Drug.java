@@ -12,6 +12,9 @@ public class Drug {
     private String ilacAdi;
     private String ilacGrubu;
     private String ilacEtkenMaddesi;
+    private int searchCount = 0;
+
+
 
     @Transient
     private int totalStock;
@@ -24,6 +27,7 @@ public class Drug {
         this.ilacAdi = ilacAdi;
         this.ilacGrubu = ilacGrubu;
         this.ilacEtkenMaddesi = ilacEtkenMaddesi;
+        this.searchCount = 0;
     }
 
     // Getter and setter methods
@@ -60,9 +64,19 @@ public class Drug {
         this.ilacEtkenMaddesi = ilacEtkenMaddesi;
     }
 
+    public int getSearchCount() {
+        return searchCount;
+    }
+
+    public void setSearchCount(int searchCount) {
+        this.searchCount = searchCount;
+    }
+
     public int getTotalStock() {
         return totalStock;
     }
+
+
 
     public void setTotalStock(int totalStock) {
         this.totalStock = totalStock;

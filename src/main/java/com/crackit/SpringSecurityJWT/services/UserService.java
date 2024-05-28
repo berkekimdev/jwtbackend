@@ -48,6 +48,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> findActiveUsers() {
+        return userRepository.findByIsActive(true); // Aktif kullanıcıları döndüren metod
+    }
+
 
     public void updatePassword(Integer id, String newPassword) {
         User user = userRepository.findById(id)

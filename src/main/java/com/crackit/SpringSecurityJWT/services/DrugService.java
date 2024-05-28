@@ -30,9 +30,14 @@ public class DrugService {
     }
 
     public void deleteDrug(Long drugId) {
+        // İlaçla ilgili tüm stokları sil
+        List<MemberDrugStock> stocks = memberDrugStockRepository.findByDrugId(drugId);
+        for (MemberDrugStock stock : stocks) {
+            memberDrugStockRepository.delete(stock);
+        }
+        // İlaç kaydını sil
         drugRepository.deleteById(drugId);
     }
-
     public Drug saveDrug(Drug drug) {
         return drugRepository.save(drug);  // Veritabanına ilacı kaydeden metod
     }

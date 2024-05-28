@@ -9,4 +9,7 @@ public interface DrugRepository extends JpaRepository<Drug, Long> {
     List<Drug> findByIlacGrubu(String ilacGrubu);
 
     List<Drug> findByIlacAdiStartingWithIgnoreCase(String ilacAdi);
+
+
+
 }
