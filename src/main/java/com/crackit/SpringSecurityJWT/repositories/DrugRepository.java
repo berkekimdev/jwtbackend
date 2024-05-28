@@ -15,7 +15,7 @@ public interface DrugRepository extends JpaRepository<Drug, Long> {
 
     List<Drug> findTop10ByOrderBySearchCountDesc();
 
-    @Query("SELECT d FROM Drug d ORDER BY d.createdAt DESC")
-    List<Drug> findTop10ByOrderByCreatedAtDesc(); // En son eklenen 10 ilaç
+    @Query("SELECT d FROM Drug d ORDER BY d.createdAt ASC")
+    List<Drug> findTop10ByOrderByCreatedAtAsc();
 
 }

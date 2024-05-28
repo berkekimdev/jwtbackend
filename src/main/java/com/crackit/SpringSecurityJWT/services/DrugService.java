@@ -42,6 +42,7 @@ public class DrugService {
     public List<Drug> findDrugsByName(String name) {
         return drugRepository.findByIlacAdiContainingIgnoreCase(name);
     }
+
     public Drug saveDrug(Drug drug) {
         return drugRepository.save(drug);  // Veritabanına ilacı kaydeden metod
     }
@@ -89,7 +90,6 @@ public class DrugService {
     }
 
     public List<Drug> findLatestDrugs() {
-        return drugRepository.findTop10ByOrderByCreatedAtDesc(); // En son eklenen ilaçları getir
+        return drugRepository.findTop10ByOrderByCreatedAtAsc(); // En eski eklenen ilaçları getir
     }
-
 }

@@ -24,6 +24,7 @@ public class DrugController {
     public List<Drug> getAllDrugs() {
         return drugService.findAllDrugs();
     }
+
     @GetMapping("/byGroup")
     public ResponseEntity<List<Drug>> getDrugsByGroup(@RequestParam String group) {
         List<Drug> drugs = drugService.findDrugsByGroup(group);
@@ -32,8 +33,6 @@ public class DrugController {
         }
         return ResponseEntity.ok(drugs);
     }
-
-
 
     @GetMapping("/{drugId}")
     public ResponseEntity<Drug> getDrugById(@PathVariable Long drugId) {
@@ -51,34 +50,33 @@ public class DrugController {
         return ResponseEntity.ok("Drug deleted successfully");
     }
 
-
-
-
     @PutMapping("/{drugId}")
     public ResponseEntity<Drug> updateDrug(@PathVariable Long drugId, @RequestBody Drug drugDetails) {
         Drug updatedDrug = drugService.updateDrug(drugId, drugDetails);
         return ResponseEntity.ok(updatedDrug);
     }
 
-
     @GetMapping("/search")
-    public ResponseEntity<List<Drug>> searchDrugs(@RequestParam String query, @RequestParam String type) {
+    public ResponseEntity<?> searchDrugs(@RequestParam String query, @RequestParam String type) {
         List<Drug> drugs;
         if (type.equals("ilacGrubu")) {
             drugs = drugService.findDrugsByGroup(query);
         } else {
-            drugs = drugService.findDrugsByName(query);
-            drugs.forEach(drug -> {
-                drug.setSearchCount(drug.getSearchCount() + 1);
-                drugService.saveDrug(drug);
-            });
+            drugs = drugService.searchDrugs(query);
+            if (!drugs.isEmpty()) {
+                drugs.forEach(drug -> {
+                    drug.setSearchCount(drug.getSearchCount() + 1);
+                    drugService.saveDrug(drug);
+                });
+            }
         }
         if (drugs.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.ok("Sonuç bulunamadı.");
         } else {
             return ResponseEntity.ok(drugs);
         }
     }
+
 
 
     @GetMapping("/byFirstLetter")
@@ -100,8 +98,4 @@ public class DrugController {
     public List<Drug> getLatestDrugs() {
         return drugService.findLatestDrugs(); // En son eklenen ilaçları getir
     }
-
-
-
-
 }
