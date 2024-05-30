@@ -18,4 +18,6 @@ public interface DrugRepository extends JpaRepository<Drug, Long> {
     @Query("SELECT d FROM Drug d ORDER BY d.createdAt ASC")
     List<Drug> findTop10ByOrderByCreatedAtAsc();
 
+    List<Drug> findByIlacEtkenMaddesiContainingIgnoreCase(String ilacEtkenMaddesi);
+
 }

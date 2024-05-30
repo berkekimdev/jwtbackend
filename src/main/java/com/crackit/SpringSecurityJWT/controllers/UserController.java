@@ -36,6 +36,8 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+
+
     @DeleteMapping("/{userId}")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<?> deleteUser(@PathVariable Integer userId) {
@@ -79,5 +81,27 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Integer id) {  // ID türünü Integer olarak güncelledik
         return userService.findUserById(id);
+    }
+    // Şehirlerin listesini getiren endpoint
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> getAllCities() {
+        List<String> cities = userService.findAllCities();
+        return ResponseEntity.ok(cities);
+    }
+
+    // Belirli bir şehre ait ilçelerin listesini getiren endpoint
+    @GetMapping("/districts")
+    public ResponseEntity<List<String>> getDistrictsByCity(@RequestParam String city) {
+        List<String> districts = userService.findDistrictsByCity(city);
+        return ResponseEntity.ok(districts);
+    }
+
+    // Şehir ve ilçeye göre kullanıcıları getiren endpoint
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> getUsersByCityAndDistrict(
+            @RequestParam String city,
+            @RequestParam(required = false) String district) {
+        List<User> users = userService.findUsersByCityAndDistrict(city, district);
+        return ResponseEntity.ok(users);
     }
 }

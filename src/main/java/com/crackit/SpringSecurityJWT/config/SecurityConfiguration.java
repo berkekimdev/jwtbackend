@@ -17,8 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import static com.crackit.SpringSecurityJWT.user.Permission.*;
 import static com.crackit.SpringSecurityJWT.user.Role.ADMIN;
 import static com.crackit.SpringSecurityJWT.user.Role.MEMBER;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -30,6 +29,8 @@ public class SecurityConfiguration {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthFilter jwtAuthFilter;
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -57,6 +58,8 @@ public class SecurityConfiguration {
                                 .requestMatchers(GET, "/api/drugs").permitAll()  // GET isteklerine herkes erişebilir
                                 .requestMatchers(GET, "/api/drugs/byGroup").permitAll()
                                 .requestMatchers(POST, "/api/drugs").hasAnyRole("MEMBER", "ADMIN")  // POST isteklerine sadece MEMBER ve ADMIN erişebilir
+                                .requestMatchers(PUT, "/api/drugs/**").hasRole(ADMIN.name())
+                                .requestMatchers(DELETE, "/api/drugs/**").hasRole(ADMIN.name())
                                 .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)

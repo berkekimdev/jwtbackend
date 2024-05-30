@@ -56,13 +56,16 @@ public class DrugController {
         return ResponseEntity.ok(updatedDrug);
     }
 
+
     @GetMapping("/search")
     public ResponseEntity<?> searchDrugs(@RequestParam String query, @RequestParam String type) {
         List<Drug> drugs;
         if (type.equals("ilacGrubu")) {
             drugs = drugService.findDrugsByGroup(query);
+        } else if (type.equals("etkenMadde")) {
+            drugs = drugService.findDrugsByActiveIngredient(query);
         } else {
-            drugs = drugService.searchDrugs(query);
+            drugs = drugService.findDrugsByName(query);
             if (!drugs.isEmpty()) {
                 drugs.forEach(drug -> {
                     drug.setSearchCount(drug.getSearchCount() + 1);

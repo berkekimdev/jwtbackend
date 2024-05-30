@@ -64,11 +64,29 @@ public class UserService {
     }
 
 
+
+
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     public User findUserById(Integer id) {  // ID türünü Integer olarak güncelledik
         return userRepository.findById(id).orElse(null);
+    }
+
+    public List<String> findAllCities() {
+        return userRepository.findAllCities();
+    }
+
+    public List<String> findDistrictsByCity(String city) {
+        return userRepository.findDistrictsByCity(city);
+    }
+
+    public List<User> findUsersByCityAndDistrict(String city, String district) {
+        if (district == null || district.isEmpty()) {
+            return userRepository.findByCity(city);
+        } else {
+            return userRepository.findByCityAndDistrict(city, district);
+        }
     }
 }

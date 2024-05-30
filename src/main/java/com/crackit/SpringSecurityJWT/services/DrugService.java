@@ -66,10 +66,12 @@ public class DrugService {
         Drug drugProbe = new Drug();
         drugProbe.setIlacAdi(searchTerm);  // İlaç ismi
         drugProbe.setIlacGrubu(searchTerm);  // İlaç grubu
+        drugProbe.setIlacEtkenMaddesi(searchTerm);
 
         ExampleMatcher caseInsensitiveMatcher = ExampleMatcher.matchingAny()
                 .withMatcher("ilacAdi", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-                .withMatcher("ilacGrubu", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+                .withMatcher("ilacGrubu", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("ilacEtkenMaddesi", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
 
         Example<Drug> drugExample = Example.of(drugProbe, caseInsensitiveMatcher);
         List<Drug> results = drugRepository.findAll(drugExample);
@@ -91,5 +93,9 @@ public class DrugService {
 
     public List<Drug> findLatestDrugs() {
         return drugRepository.findTop10ByOrderByCreatedAtAsc(); // En eski eklenen ilaçları getir
+    }
+
+    public List<Drug> findDrugsByActiveIngredient(String activeIngredient) {
+        return drugRepository.findByIlacEtkenMaddesiContainingIgnoreCase(activeIngredient);
     }
 }
