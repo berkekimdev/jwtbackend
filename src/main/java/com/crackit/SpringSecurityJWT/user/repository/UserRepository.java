@@ -9,17 +9,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+// @Repository, bu arayüzün bir Spring veri erişim bileşeni olduğunu belirtir.
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    // E-posta adresine göre kullanıcıyı bulma
     Optional<User> findByEmail(String email);
-    List<User> findByIsActive(boolean isActive); // Yeni metod eklendi
 
+    // Kullanıcıların aktiflik durumuna göre listeleme
+    List<User> findByIsActive(boolean isActive);
 
-    // Şehirlerin listesi
+    // Şehirlerin listesini getiren sorgu
     @Query("SELECT DISTINCT u.city FROM User u")
     List<String> findAllCities();
 
-    // Belirli bir şehre ait ilçelerin listesi
+    // Belirli bir şehre ait ilçelerin listesini getiren sorgu
     @Query("SELECT DISTINCT u.district FROM User u WHERE u.city = :city")
     List<String> findDistrictsByCity(@Param("city") String city);
 
@@ -28,5 +32,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // Sadece şehre göre kullanıcıları bulma
     List<User> findByCity(String city);
-
 }

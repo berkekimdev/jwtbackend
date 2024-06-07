@@ -18,18 +18,27 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// @Component, bu sınıfın bir Spring bileşeni olduğunu belirtir ve Spring tarafından yönetilir.
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
+    // DrugRepository, ilaç veritabanı işlemleri için kullanılır.
     @Autowired
     private DrugRepository drugRepository;
+
+    // MemberDrugStockRepository, üye ilaç stoğu veritabanı işlemleri için kullanılır.
     @Autowired
     private MemberDrugStockRepository memberDrugStockRepository;
+
+    // UserRepository, kullanıcı veritabanı işlemleri için kullanılır.
     @Autowired
     private UserRepository userRepository;
+
+    // PasswordEncoder, şifreleri hashlemek için kullanılır.
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // run metodu, uygulama başlatıldığında çalıştırılır ve veritabanını tohumlar.
     @Override
     public void run(String... args) throws Exception {
         // Admin kullanıcısını kontrol et ve yoksa ekle
@@ -56,6 +65,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .map(Drug::getIlacAdi)
                 .collect(Collectors.toSet());
 
+        // Yeni ilaç listesi oluşturun
         List<Drug> drugs = Arrays.asList(
                 new Drug("Parol", "Ağrı Kesici", "Parasetamol"),
                 new Drug("Majezik", "Ağrı Kesici", "Flurbiprofen"),
@@ -150,11 +160,12 @@ public class DatabaseSeeder implements CommandLineRunner {
                 new Drug("Daypro", "Ağrı Kesici", "Oksaprozin")
         );
 
-
+        // Veritabanında mevcut olmayan ilaçları filtreleyin
         List<Drug> uniqueDrugs = drugs.stream()
                 .filter(drug -> !existingDrugNames.contains(drug.getIlacAdi()))
                 .collect(Collectors.toList());
 
+        // Yeni ilaçları veritabanına kaydedin
         drugRepository.saveAll(uniqueDrugs);
 
         // 10 eczane ekleyin
@@ -291,12 +302,13 @@ public class DatabaseSeeder implements CommandLineRunner {
                         .build()
         );
 
+        // Yeni kullanıcıları veritabanına kaydedin
         userRepository.saveAll(users);
 
         // Rastgele stok verilerini ekleyin
         Random random = new Random();
         for (User user : users) {
-            for (Drug drug : drugs) {
+            for (Drug drug : uniqueDrugs) {
                 MemberDrugStock stock = new MemberDrugStock(user, drug, random.nextInt(40) + 1);
                 memberDrugStockRepository.save(stock);
             }

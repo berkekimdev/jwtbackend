@@ -10,34 +10,51 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+// @Service, bu sınıfın bir Spring servis bileşeni olduğunu belirtir.
+// Servis bileşenleri, iş mantığını (business logic) içerir.
 @Service
+
+// @RequiredArgsConstructor, Lombok tarafından sağlanır ve final alanlar için bir yapıcı (constructor) oluşturur.
+// Bu sayede bağımlılık enjeksiyonu (dependency injection) kolaylaştırılır.
 @RequiredArgsConstructor
 public class AuthService {
-    private  final UserRepository userRepository;
-    private  final JwtService jwtService;
+    // Kullanıcı veritabanı işlemleri için UserRepository kullanılır.
+    private final UserRepository userRepository;
+    // JWT token işlemleri için JwtService kullanılır.
+    private final JwtService jwtService;
+    // Şifreleme işlemleri için PasswordEncoder kullanılır.
     private final PasswordEncoder passwordEncoder;
+    // Kimlik doğrulama işlemleri için AuthenticationManager kullanılır.
     private final AuthenticationManager authenticationManager;
 
+    // Kullanıcı kaydı işlemlerini gerçekleştiren metot
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+        // Yeni kullanıcı oluşturma
         var user = User.builder()
-                .eczaneAdi(registerRequest.getEczaneAdi())
-                .city(registerRequest.getCity()) // lastName to city
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .address(registerRequest.getAddress())
-                .phoneNumber(registerRequest.getPhoneNumber())
-                .district(registerRequest.getDistrict()) // Yeni eklenen alan
-                .latitude(registerRequest.getLatitude()) // Yeni eklenen alan
-                .longitude(registerRequest.getLongitude()) // Yeni eklenen alan
-                .role(registerRequest.getRole())
-                .isActive(false)
+                .eczaneAdi(registerRequest.getEczaneAdi()) // Eczane adı
+                .city(registerRequest.getCity()) // Şehir
+                .email(registerRequest.getEmail()) // E-posta
+                .password(passwordEncoder.encode(registerRequest.getPassword())) // Şifreyi şifreleme
+                .address(registerRequest.getAddress()) // Adres
+                .phoneNumber(registerRequest.getPhoneNumber()) // Telefon numarası
+                .district(registerRequest.getDistrict()) // İlçe (Yeni eklenen alan)
+                .latitude(registerRequest.getLatitude()) // Enlem (Yeni eklenen alan)
+                .longitude(registerRequest.getLongitude()) // Boylam (Yeni eklenen alan)
+                .role(registerRequest.getRole()) // Rol
+                .isActive(false) // Hesap aktif değil olarak başlatma
                 .build();
+
+        // Kullanıcıyı veritabanına kaydetme
         var savedUser = userRepository.save(user);
+
+        // Kullanıcı için JWT token oluşturma
         String jwtToken = jwtService.generateToken(user);
+
+        // AuthenticationResponse ile token'ı döndürme
         return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
 
-
+    // Kullanıcı kimlik doğrulama işlemlerini gerçekleştiren metot
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         // Kullanıcı bilgilerini doğrulama
         authenticationManager.authenticate(
@@ -48,13 +65,13 @@ public class AuthService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı bulunamadı"));
 
+        // Kullanıcı aktif değilse hata fırlatma
         if (!user.isActive()) {
             throw new IllegalStateException("Hesap aktif değil. Lütfen hesabınızın aktifleştirildiğinden emin olun.");
         }
 
-        // Kullanıcı aktifse, JWT token üret ve dön
+        // Kullanıcı aktifse, JWT token üret ve AuthenticationResponse ile döndür
         String jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
     }
 }
-
