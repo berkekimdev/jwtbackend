@@ -2,15 +2,12 @@ package com.crackit.SpringSecurityJWT.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // @RestController, bu sınıfın bir Spring MVC denetleyicisi olduğunu belirtir.
 // Bu, HTTP isteklerini işlemek için kullanılır.
 @RestController
-
+@CrossOrigin
 // @RequestMapping, bu denetleyicinin tüm yollarının "/crackit/v1/auth" ile başlaması gerektiğini belirtir.
 @RequestMapping("/crackit/v1/auth")
 

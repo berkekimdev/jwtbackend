@@ -15,7 +15,7 @@ import java.util.Optional;
 // @RestController, bu sınıfın bir Spring MVC denetleyicisi olduğunu belirtir.
 // Bu, HTTP isteklerini işlemek için kullanılır.
 @RestController
-
+@CrossOrigin
 // @RequestMapping, bu denetleyicinin tüm yollarının "/api/users" ile başlaması gerektiğini belirtir.
 @RequestMapping("/api/users")
 public class UserController {

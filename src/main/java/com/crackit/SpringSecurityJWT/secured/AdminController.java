@@ -1,15 +1,12 @@
 package com.crackit.SpringSecurityJWT.secured;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // @RestController, bu sınıfın bir Spring MVC denetleyicisi olduğunu belirtir.
 // Bu, HTTP isteklerini işlemek için kullanılır.
 @RestController
-
+@CrossOrigin
 // @RequestMapping, bu denetleyicinin tüm yollarının "/crackit/v1/admin" ile başlaması gerektiğini belirtir.
 @RequestMapping("/crackit/v1/admin")
 
